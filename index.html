@@ -1,13 +1,61 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html lang="en">
+<!DOCTYPE HTML>
+<html lang="en-US">
 <head>
-	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<meta charset="UTF-8">
 	<title>GreatBox - A great jQuery lighbox plugin</title>
 	<link rel="stylesheet" type="text/css" href="css/style.css" media="all">
 	<script type="text/javascript" src="js/jquery-1.8.2.min.js"></script>
 	<script type="text/javascript" src="js/jquery.greatbox.js"></script>
-</head>
-<body>
 	
+	<script type="text/javascript">
+		$(document).ready(function(){
+			/* Demonstrações  */
+
+			//Modal simples
+			$('#teste1').greatbox();
+
+			//Modal com ajax simples
+			$('#teste2').greatbox({
+				ajax: true
+			});			
+		});
+	</script>
+</head>
+
+<body>
+	<div class="entry-content">
+		<h1 class="entry-title">greatbox</h1>
+		
+		<h2>Exemplos por tipo de chamada:</h2>
+		<ul>
+			<!-- Modal simples -->
+			<li>
+				<a href="javascript:;" id="teste1">Modal simples</a>
+				<code>
+					<strong>html:</strong> <br />
+					&lt;a href="javascript;" id="teste1"&gt;Modal simples&lt;/a&gt;
+				</code>
+				<code>
+					<strong>javascript:</strong> <br />
+					$('#teste1').greatbox();
+				</code>
+			</li>
+
+			<!-- Modal com ajax simples -->
+			<li>
+				<a href="http://google.com" id="teste2">Modal com ajax (pegando via href)</a>
+				<code>
+					<strong>html:</strong> <br />
+					&lt;a href="http://google.com" id="teste2"&gt;Modal com ajax (pegando via href)&lt;/a&gt;
+				</code>
+				<code>
+					<strong>javascript:</strong> <br />
+					$('#teste2').greatbox({ <br />
+					&nbsp;&nbsp;&nbsp;&nbsp;ajax: true <br />
+					});
+				</code>
+			</li>
+		</ul>
+	</div>
 </body>
 </html>

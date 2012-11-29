@@ -42,3 +42,4 @@ List to do:
 Links de estudo e referências:
 ------------------------------
 +	http://www.smashingmagazine.com/2009/05/27/modal-windows-in-modern-web-design/
++	http://br.jqueryboilerplate.com/
