@@ -123,27 +123,31 @@
 					//Executa callback do usuário
 					if (typeof eval(_this.options.ajaxcomplete) == 'function') {
 						$.fn.callback = _this.options.ajaxcomplete;
-						$(this).callback();
+						$(_this.element).callback();
 					}
 				},
 				error: function(jqXHR, textStatus, errorThrown) {
 					//Plota erro no console
-					if(typeof console != 'undefined')
+					if(typeof console != 'undefined') {
 						console.log('url:', _this.options.ajax, ' jqXHR:', jqXHR, ' textStatus:', textStatus, ' errorThrown:', errorThrown);
+					}
 
 					//Exibe erro
-					if(_this.options.ajaxerrortext)
+					if(_this.options.ajaxerrortext) {
 						_this.showError(_this.options.ajaxerrortext);
+					}
 
 					//Executa callback do usuário
 					if (typeof eval(_this.options.errorCallback) == 'function') {
 						$.fn.callback = _this.options.errorCallback;
-						$(this).callback();
+						$(_this.element).callback();
 					}
+				},
+				success: function(data, textStatus, jqXHR){
+					//Cria html
+					_this.createHtml(data);
 				}
 			});
-
-				//Cria html
 		}
 
 		//Tratamento caso não seja ajax
@@ -154,17 +158,49 @@
 	};
 
 	//Construção do HTML de acordo com as opções passadas
-	Plugin.prototype.createHtml = function() {
+	Plugin.prototype.createHtml = function(htmlInside) {
+		//Utilizado para poder chamar funções do plugin dentro de callbacks do jQuery
+		var _this = this;
 
-		html += '<div id="' + pluginName + '">';
-			//Topo com título
-			html += '<div class="' + this.prefix + 'header">';
+		//Estrutura html
+		html = '<div id="' + pluginName + '">';
+			html += '<div id="' + pluginName + '_container">';
+				//Topo com título
+				html += '<div class="' + this.prefix + 'header">';
+				html += '</div>';
+
+				//Conteúdo
+				html += '<div class="' + this.prefix + 'content">';
+					html += '<div class="' + this.prefix + 'contentContainer">';
+						html += htmlInside;
+					html += '</div>';
+				html += '</div>';
+
+				//Rodapé e seus links de ação
+				html += '<div class="' + this.prefix + 'footer">';
+				html += '</div>';			
 			html += '</div>';
-
-			//Rodapé e seus links de ação
-			html += '<div class="' + this.prefix + 'footer">';
-			html += '</div>';			
 		html += '</div>';
+
+		//Cria DOM
+		var modalElement = $(html).appendTo('body');
+		modalElement.fadeTo(0, 0.01);
+
+		//Callback onCreate
+		if (typeof eval(this.options.oncreate) == 'function') {
+			$.fn.callback = this.options.oncreate;
+			$(modalElement).callback();
+		}
+
+		
+		//Exibe o modal
+		modalElement.fadeTo(this.options.fadespeed, 1, function(){
+			//Callback onShow
+			if (typeof eval(_this.options.onShow) == 'function') {
+				$.fn.callback = _this.options.onShow;
+				$(modalElement).callback();
+			}
+		});
 
 		//Retorno
 		return html;

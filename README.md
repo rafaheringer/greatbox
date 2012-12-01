@@ -11,6 +11,9 @@ Releases:
 +	Modal ser ativado por chamada direta no js ( ex.: $('.el').greatBox(); )
 +	Opções serem passadas pela função ( ex.: $('.el').greatBox({op1: val1}); )
 +	Opção de AJAX
++	Callback onshow	( Ao exibir o modal na tela )
++	Callback oncreate ( ao criar o modal, logo que o HTML existe ) 
++	Opções serem passadas por meta-dados ( ex.: <a href="#noAjax" class="greatBoxLink" data-option1="value1" /> )
 
 List to do:
 -----------
@@ -27,7 +30,6 @@ List to do:
 +	Fechar modal aberto anteriormente ao abrir um novo
 +	Método para fechar modal
 +	Método para definir opções padrões ( ex.: $.greatBox.setDefaults({opt1: val1}); )
-+	Opções serem passadas por meta-dados ( ex.: <a href="#noAjax" class="greatBoxLink" data-option1="value1" /> )
 +	Opções de classes para o modal e para o blackout
 +	Opção para criar botões de ações personalizados ( ex.: [ {name: 'btn1', class="newClass", action: function(){}} ] )
 +	Opção de posicionamento automático
@@ -35,9 +37,7 @@ List to do:
 +	Opção de passar um outro elemento para copiar o html
 +	Opção de posição ( center, vcenter, hcenter, none )
 +	Opções de texto para botões padrões e link de fechar
-+	Callback oncreate ( ao criar o modal, logo que o HTML existe ) 
 +	Callback onclose ( quando o modal é fechado )
-+	Callback onshow	( Ao exibir o modal na tela )
 
 Links de estudo e referências:
 ------------------------------
