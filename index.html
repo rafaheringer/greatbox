@@ -12,7 +12,9 @@
 			/* Demonstrações  */
 
 			//Modal simples
-			$('#teste1').greatbox();
+			$('#teste1').greatbox({
+				content: "<h1>Página de modal com HTML imbutido</h1><p>Parágrafo de exemplo.</p>"
+			});
 
 			//Modal com ajax simples
 			$('#teste2').greatbox();
@@ -41,7 +43,9 @@
 				</code>
 				<code>
 					<strong>javascript:</strong> <br />
-					$('#teste1').greatbox();
+					$('#teste1').greatbox({<br />
+					&nbsp;&nbsp;&nbsp;&nbsp;content: "&lt;h1&gt;Página de modal com HTML imbutido&lt;/h1&gt;&lt;p&gt;Parágrafo de exemplo.&lt;/p&gt;"<br />
+					});
 				</code>
 			</li>
 

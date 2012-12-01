@@ -29,6 +29,7 @@
 
 		//Customização do comportamento
 		buttons: null,				//Botões customizáveis que ficam no rodapé do modal
+		content: null,				//Conteúdo que será plotado no modal. Pode ser string ou elemento jquery
 
 		//Ajax
 		ajax: null,					//Habilita ajax. Se for "true", pegar URL do href ou data-ajaxurl. "False" para forçar desabilitação.
@@ -40,7 +41,8 @@
 
 		//Textos
 		ajaxerrortext: 'Ops! Algum erro ocorreu com a requisição',	//Erro no ajax
-		loadingtext: 'Loading...'	//Texto padrão para "carregando"
+		contenterror: 'Ops! Parece que o conteúdo está vazio...',	//Texto caso ocorra erro qualquer com conteúdo
+		loadingtext: 'Carregando...'								//Texto padrão para "carregando"
 	};
 
 	//Controles de Timeout e Interval
@@ -155,8 +157,22 @@
 
 		//Tratamento caso não seja ajax
 		else {
-			//Cria html
-			this.createHtml();
+			//Verifica se foi passado um elemento e se existe HTML nele
+			if(typeof this.options.content == 'object' && $(this.options.content).html().length != 0) {
+				//Cria html
+				this.createHtml($(this.options.content).html());
+			}
+
+			//Caso tenha passado conteúdo tipo "string" e se existe conteúdo
+			else if(typeof this.options.content == "string" && this.options.content.length != 0) {
+				//Cria html
+				this.createHtml(this.options.content);
+			}
+
+			//Caso venha nulo
+			else {
+				this.showError(this.options.contenterror);
+			}
 		}
 	};
 
