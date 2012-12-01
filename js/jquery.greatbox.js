@@ -16,23 +16,33 @@
 	//Opções padrões
 	var defaults = {
 		//Callbacks
-		onShow: null, 				//Callback que será executado logo que o html for exibido na tela
-		onClose: null,				//Callback que será executado assim que o modal receber evento para se fechar
-		onCreate: null,				//Callback que será executado quando o html for criado no DOM, mas ainda não exibido
+		onshow: null, 				//Callback que será executado logo que o html for exibido na tela
+		onclose: null,				//Callback que será executado assim que o modal receber evento para se fechar
+		oncreate: null,				//Callback que será executado quando o html for criado no DOM, mas ainda não exibido
 
 		//Customização visual
-		addClass: "",				//Adiciona novas classes ao elemento pai do modal
-		fadeSpeed: 200,			//Velocidade das animações de fading, 0 para desativar
+		addclass: "",				//Adiciona novas classes ao elemento pai do modal
+		fadespeed: 200,				//Velocidade das animações de fading, 0 para desativar
+		errordisplaytime: 6500,		//Tempo de exibição dos erros na tela, até ele desaparecer. 0 para deixar sempre exibido.
 
 		//Customização do comportamento
 		buttons: null,				//Botões customizáveis que ficam no rodapé do modal
 
 		//Ajax
-		ajax: false,				//Habilita ajax. Se for "true", pegar URL do href ou data-ajaxurl. Pode ser passado a url direto
+		ajax: null,					//Habilita ajax. Se for "true", pegar URL do href ou data-ajaxurl. "False" para forçar desabilitação.
+		ajaxcache: true,			//Habilita cache para ajax
+		ajaxdata: null,				//Dados para serem passados por ajax
+		ajaxbeforesend: null,		//Função de callback padrão para jquery ajax
+		ajaxcomplete: null,			//Função de callback padrão para jquery ajax
+		ajaxerror: null,			//Função de callback padrão para jquery ajax
 
 		//Textos
-		loadingText: 'Loading...'	//Texto padrão para "carregando"
+		ajaxerrortext: 'Ops! Algum erro ocorreu com a requisição',	//Erro no ajax
+		loadingtext: 'Loading...'	//Texto padrão para "carregando"
 	};
+
+	//Controles de Timeout e Interval
+	ERRORPID = null;
 
 	//Construtor
 	function Plugin(element, options) {
@@ -47,6 +57,9 @@
 		//Extendendo as opções
 		this.options = $.extend({}, defaults, options);
 
+		//Verifica atributos no elemento (///TODO: Parse para transformar string de callbacks em funções)
+		$.extend(this.options, this.element.data());
+
 		//Inicialização
 		this.init();
 	};
@@ -55,6 +68,13 @@
 	Plugin.prototype.init = function() {
 		//Utilizado para poder chamar funções do plugin dentro de callbacks do jQuery
 		var _this = this;
+
+		//Verifica se será executado como ajax
+		if(this.options.ajax === null) {
+			//Verifica se a URL do elemento não é um hash ou javascript
+			if( this.element.attr('href').split('')[0] != '#' && this.element.attr('href').indexOf('javascript:') == -1 )
+				this.options.ajax = this.element.attr('href');
+		}
 
 		//Caso seja elemento, dispara no click
 		if (this.element.length) {
@@ -77,6 +97,8 @@
 
 	//Primeiros passos para criação do modal
 	Plugin.prototype.startModal = function() {
+		//Utilizado para poder chamar funções do plugin dentro de callbacks do jQuery
+		var _this = this;
 
 		//Previne que exista mais de um modal na tela
 
@@ -89,6 +111,37 @@
 			this.showLoading();
 
 			//Faz chamada ajax
+			$.ajax({
+				url: this.options.ajax,
+				cache: this.options.ajaxcache,
+				data: this.options.ajaxdata,
+				beforeSend: this.options.ajaxbeforesend,
+				complete: function() {
+					//Esconde loading
+					_this.hideLoading();
+
+					//Executa callback do usuário
+					if (typeof eval(_this.options.ajaxcomplete) == 'function') {
+						$.fn.callback = _this.options.ajaxcomplete;
+						$(this).callback();
+					}
+				},
+				error: function(jqXHR, textStatus, errorThrown) {
+					//Plota erro no console
+					if(typeof console != 'undefined')
+						console.log('url:', _this.options.ajax, ' jqXHR:', jqXHR, ' textStatus:', textStatus, ' errorThrown:', errorThrown);
+
+					//Exibe erro
+					if(_this.options.ajaxerrortext)
+						_this.showError(_this.options.ajaxerrortext);
+
+					//Executa callback do usuário
+					if (typeof eval(_this.options.errorCallback) == 'function') {
+						$.fn.callback = _this.options.errorCallback;
+						$(this).callback();
+					}
+				}
+			});
 
 				//Cria html
 		}
@@ -118,9 +171,53 @@
 	};
 
 	/*
-	 * Loading - Carregamento do modal
-	 * ===============================
+	 * Loading e erros
+	 * ===============
 	 */
+
+	//Chama elemento de erro
+	Plugin.prototype.showError = function(text) {
+		//Utilizado para poder chamar funções do plugin dentro de callbacks do jQuery
+		var _this = this;
+
+		var errorElement = document.getElementById(this.prefix + 'error');
+
+		//Verifica se já não existe um erro
+		if ( errorElement ) {
+			errorElement = $(document.getElementById(this.prefix + 'error')).fadeIn(this.options.fadespeed);
+		}
+
+		//Caso não exista o loading
+		else {
+			//Cria html do loading
+			var html = '<div id="' + this.prefix + 'error">';
+				html += '<div class="' + this.prefix + 'errorContainer">';
+					html += '<span class="' + this.prefix + 'errorText">';
+					html += '<span>';
+				html += '</div>';
+			html += '</div>';
+
+			//Adiciona na página com fade
+			errorElement = $(html).appendTo('body');
+			errorElement.fadeOut(0).fadeIn(this.options.fadespeed);
+		}
+
+		//Plota texto
+		$('.' + this.prefix + 'errorText', errorElement).html(text);
+
+		//Esconde blackout (///TODO: Esconder somente se não existir modal na tela)
+		_this.hideBlackout();
+
+		//Esconde o erro depois de alguns segundos
+		if(this.options.errordisplaytime != 0) {
+			clearTimeout(ERRORPID);
+			ERRORPID = setTimeout(function() {
+				errorElement.fadeOut(_this.options.fadespeed);
+			}, this.options.errordisplaytime);
+		}
+
+		return errorElement;
+	};
 
 	//Chama loading
 	Plugin.prototype.showLoading = function() {
@@ -128,7 +225,7 @@
 
 		//Verifica se já não existe um loading
 		if ( loadingElement ) {
-			loadingElement = $(document.getElementById(this.prefix + 'loading')).fadeIn(this.options.fadeSpeed);
+			loadingElement = $(document.getElementById(this.prefix + 'loading')).fadeIn(this.options.fadespeed);
 		}
 
 		//Caso não exista o loading
@@ -136,27 +233,26 @@
 			//Cria html do loading
 			var html = '<div id="' + this.prefix + 'loading">';
 				html += '<div class="' + this.prefix + 'loadingContainer">';
-					if(this.options.loadingText) {
-						html += '<span class="' + this.prefix + 'loadingText">';
-							html += this.options.loadingText;
-						html += '<span>';
-					}
+					html += '<span class="' + this.prefix + 'loadingtext">';
+					html += '<span>';
 				html += '</div>';
 			html += '</div>';
 
 			//Adiciona na página com fade
 			loadingElement = $(html).appendTo('body');
-			loadingElement.fadeOut(0).fadeIn(this.options.fadeSpeed);
+			loadingElement.fadeOut(0).fadeIn(this.options.fadespeed);
 
 		}
+
+		//Plota texto
+		$('.'+this.prefix + 'loadingtext', loadingElement).html(this.options.loadingtext);
 
 		return loadingElement;
 	};
 
 	//Cancela loading
 	Plugin.prototype.hideLoading = function() {
-		var loadingElement = document.getElementById(this.prefix + 'loading');
-		loadingElement.fadeOut(this.options.fadeSpeed);
+		return $(document.getElementById(this.prefix + 'loading')).fadeOut(this.options.fadespeed);
 	};
 
 	/*
@@ -170,7 +266,7 @@
 
 		//Verifica se já não existe um blackout
 		if ( blackoutElement ) {
-			blackoutElement = $(document.getElementById(this.prefix + 'blackout')).fadeIn(this.options.fadeSpeed);
+			blackoutElement = $(document.getElementById(this.prefix + 'blackout')).fadeIn(this.options.fadespeed);
 		}
 
 		//Caso não exista o blackout
@@ -180,7 +276,7 @@
 
 			//Adiciona na página com fade
 			blackoutElement = $(html).appendTo('body');
-			blackoutElement.fadeOut(0).fadeIn(this.options.fadeSpeed);
+			blackoutElement.fadeOut(0).fadeIn(this.options.fadespeed);
 
 		}
 
@@ -192,8 +288,7 @@
 
 	//Cancela blackout
 	Plugin.prototype.hideBlackout = function() {
-		var blackoutElement = document.getElementById(this.prefix + 'blackout');
-		blackoutElement.fadeOut(this.options.fadeSpeed);
+		return $(document.getElementById(this.prefix + 'blackout')).fadeOut(this.options.fadespeed);
 	};
 
 

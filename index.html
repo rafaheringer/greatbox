@@ -15,9 +15,10 @@
 			$('#teste1').greatbox();
 
 			//Modal com ajax simples
-			$('#teste2').greatbox({
-				ajax: true
-			});			
+			$('#teste2').greatbox();
+
+			//Modal com opções via data
+			$('#teste4').greatbox();
 		});
 	</script>
 </head>
@@ -43,16 +44,29 @@
 
 			<!-- Modal com ajax simples -->
 			<li>
-				<a href="http://google.com" id="teste2">Modal com ajax (pegando via href)</a>
+				<a href="ajax-call.html" id="teste2">Modal com ajax (pegando via href)</a>
 				<code>
 					<strong>html:</strong> <br />
-					&lt;a href="http://google.com" id="teste2"&gt;Modal com ajax (pegando via href)&lt;/a&gt;
+					&lt;a href="ajax-call.html" id="teste2"&gt;Modal com ajax (pegando via href)&lt;/a&gt;
 				</code>
 				<code>
 					<strong>javascript:</strong> <br />
-					$('#teste2').greatbox({ <br />
-					&nbsp;&nbsp;&nbsp;&nbsp;ajax: true <br />
-					});
+					$('#teste2').greatbox();
+				</code>
+			</li>
+
+			<!-- Modal com opções via JS -->
+
+			<!-- Modal com opções via data -->
+			<li>
+				<a href="javascript;" id="teste4" data-ajax="ajax-call.html" data-fadeSpeed="0">Modal com opções via atributo data</a>
+				<code>
+					<strong>html:</strong> <br />
+					&lt;a href="javascript;" id="teste4" data-ajax="ajax-call.html" data-fadeSpeed="500"&gt;Modal com opções via atributo data&lt;/a&gt;
+				</code>
+				<code>
+					<strong>javascript:</strong> <br />
+					$('#teste4').greatbox();
 				</code>
 			</li>
 		</ul>
