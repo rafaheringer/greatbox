@@ -17,6 +17,9 @@
 			//Modal com ajax simples
 			$('#teste2').greatbox();
 
+			//Modal com opções via js
+			$('#teste3').greatbox({'removepagescroll': true});
+
 			//Modal com opções via data
 			$('#teste4').greatbox();
 		});
@@ -56,10 +59,23 @@
 			</li>
 
 			<!-- Modal com opções via JS -->
+			<li>
+				<a href="ajax-call.html" id="teste3">Modal com opções via js</a>
+				<code>
+					<strong>html:</strong> <br />
+					&lt;a href="ajax-call.html" id="teste3"&gt;Modal com opções via javascript&lt;/a&gt;
+				</code>
+				<code>
+					<strong>javascript:</strong> <br />
+					$('#teste3').greatbox({<br/>
+					&nbsp;&nbsp;&nbsp;&nbsp;'removepagescroll':true <br />
+					});
+				</code>
+			</li>
 
 			<!-- Modal com opções via data -->
 			<li>
-				<a href="javascript;" id="teste4" data-ajax="ajax-call.html" data-fadeSpeed="0">Modal com opções via atributo data</a>
+				<a href="javascript;" id="teste4" data-ajax="ajax-call.html" data-fadeSpeed="0" data-removepagescroll="true">Modal com opções via atributo data</a>
 				<code>
 					<strong>html:</strong> <br />
 					&lt;a href="javascript;" id="teste4" data-ajax="ajax-call.html" data-fadeSpeed="500"&gt;Modal com opções via atributo data&lt;/a&gt;

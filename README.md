@@ -14,10 +14,10 @@ Releases:
 +	Callback onshow	( Ao exibir o modal na tela )
 +	Callback oncreate ( ao criar o modal, logo que o HTML existe ) 
 +	Opções serem passadas por meta-dados ( ex.: <a href="#noAjax" class="greatBoxLink" data-option1="value1" /> )
++	Posicionamento automático do modal de acordo com a opção do usuário
 
 List to do:
 -----------
-+	Posicionamento automático do modal de acordo com a opção do usuário
 +	Sistema inteligente de cálculo (ativado manualmente) para conteúdos maiores que a página
 +	Modal abrir automaticamente quando a página carrega ou de forma anônima ( ex.: $.greatBox(); )
 +	Modal ser ativado por elementos com classe ( ex.: <a href="ajax.html" class="greatBoxLink" /> )

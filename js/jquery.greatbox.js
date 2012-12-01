@@ -24,6 +24,8 @@
 		addclass: "",				//Adiciona novas classes ao elemento pai do modal
 		fadespeed: 200,				//Velocidade das animações de fading, 0 para desativar
 		errordisplaytime: 6500,		//Tempo de exibição dos erros na tela, até ele desaparecer. 0 para deixar sempre exibido.
+		center: true,				//Centralizar o modal no meio da página?
+		removepagescroll: false,	//Remover o scroll da página quando estiver com o modal?
 
 		//Customização do comportamento
 		buttons: null,				//Botões customizáveis que ficam no rodapé do modal
@@ -53,6 +55,7 @@
 		this._defaults = defaults;
 		this._name = pluginName;
 		this.element = $(element);
+		this.modalElement = $('');
 
 		//Extendendo as opções
 		this.options = $.extend({}, defaults, options);
@@ -183,27 +186,51 @@
 		html += '</div>';
 
 		//Cria DOM
-		var modalElement = $(html).appendTo('body');
-		modalElement.fadeTo(0, 0.01);
+		this.modalElement = $(html).appendTo('body');
+
+		//Truque para executar qualquer aplicação
+		//de plugins visuais (como selectbox estilizado).
+		//O width e height dos elementos só é calculado
+		//Quando eles estão visíveis na tela.
+		this.modalElement.fadeTo(0, 0.01);
 
 		//Callback onCreate
 		if (typeof eval(this.options.oncreate) == 'function') {
 			$.fn.callback = this.options.oncreate;
-			$(modalElement).callback();
+			$(this.modalElement).callback();
 		}
 
-		
+		//Remove o scroll da página
+		if(this.options.removepagescroll == true) {
+			$('body, html').css({'overflow':'hidden'});
+		}
+
+		//Calcula o centro do modal
+		if(this.options.center == true) {
+			this.centerModal();
+		}
+
 		//Exibe o modal
-		modalElement.fadeTo(this.options.fadespeed, 1, function(){
+		this.modalElement.fadeTo(this.options.fadespeed, 1, function(){
 			//Callback onShow
 			if (typeof eval(_this.options.onShow) == 'function') {
 				$.fn.callback = _this.options.onShow;
-				$(modalElement).callback();
+				$(_this.modalElement).callback();
 			}
 		});
 
 		//Retorno
 		return html;
+	};
+
+	//Centralizar o modal de acordo com sua altura e largura
+	Plugin.prototype.centerModal = function() {
+		this.modalElement.css({
+			'top': '50%', 
+			'left': '50%', 
+			'margin-left': this.modalElement.outerWidth() / -2,
+			'margin-top': this.modalElement.outerHeight() / -2
+		});
 	};
 
 	/*

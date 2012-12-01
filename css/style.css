@@ -30,11 +30,11 @@
 	position: fixed;
 }
 
-#greatbox {
+#greatbox_loading {
 	z-index: 1001; /* Controle de profundidade na tela */
 }
 
-#greatbox_loading {
+#greatbox {
 	z-index: 1002; /* Controle de profundidade na tela */
 }
 
@@ -55,6 +55,7 @@
 	min-width: 400px;
 	min-height: 200px;
 	background: white;
+	max-width: 500px;
 }
 
 #greatbox_loading {
