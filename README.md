@@ -5,6 +5,9 @@ A great jquery lighbox plugin
 Releases:
 ---------
 ### Current development ###
++	Fechar modal com a tecla "ESC"
+
+01.12.2012
 +	Criação da base do plugin
 +	Criação do github
 +	Criação do html base para o modal ( blackout, topo, corpo, rodapé etc. )
@@ -21,7 +24,6 @@ List to do:
 +	Sistema inteligente de cálculo (ativado manualmente) para conteúdos maiores que a página
 +	Modal abrir automaticamente quando a página carrega ou de forma anônima ( ex.: $.greatBox(); )
 +	Modal ser ativado por elementos com classe ( ex.: <a href="ajax.html" class="greatBoxLink" /> )
-+	Fechar modal com a tecla "ESC"
 +	Fechar o modal pelo botão padrão "Fechar"
 +	Fechar modal clicando do lado de fora
 +	Tipos padrões de modal ( ex.: success, alert, error, question e default )

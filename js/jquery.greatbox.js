@@ -10,6 +10,9 @@
  */
  
 ;(function ($, window, undefined) {
+	//Modo Strict para boas práticas
+	"use strict";
+
 	//Nome do plugin
 	var pluginName = "greatbox";
 
@@ -46,7 +49,7 @@
 	};
 
 	//Controles de Timeout e Interval
-	ERRORPID = null;
+	var ERRORPID = null;
 
 	//Construtor
 	function Plugin(element, options) {
@@ -54,10 +57,10 @@
 		this.prefix = pluginName + '_';
 
 		//Variáveis a serem utilizadas pelo plugin
-		this._defaults = defaults;
-		this._name = pluginName;
-		this.element = $(element);
-		this.modalElement = $('');
+		this._defaults = defaults;	//As opções padrões inalteradas
+		this._name = pluginName;	//Nome do plugin
+		this.element = $(element);	//O elemento que chamou o modal
+		this.modalElement = $('');	//O próprio modal, assim que for criado
 
 		//Extendendo as opções
 		this.options = $.extend({}, defaults, options);
@@ -85,7 +88,7 @@
 		if (this.element.length) {
 			this.element.on('click', function(event) {
 				//Começa o modal
-				_this.startModal();
+				_this.start();
 
 				//Previne o evento padrão, assegurando que a página não recarregue
 				event.preventDefault();
@@ -95,13 +98,13 @@
 		//Se não, abre modal diretamente
 		else {
 			//Começa o modal
-			this.startModal();
+			this.start();
 		}
 		
 	};
 
 	//Primeiros passos para criação do modal
-	Plugin.prototype.startModal = function() {
+	Plugin.prototype.start = function() {
 		//Utilizado para poder chamar funções do plugin dentro de callbacks do jQuery
 		var _this = this;
 
@@ -150,7 +153,7 @@
 				},
 				success: function(data, textStatus, jqXHR){
 					//Cria html
-					_this.createHtml(data);
+					_this.create(data);
 				}
 			});
 		}
@@ -160,13 +163,13 @@
 			//Verifica se foi passado um elemento e se existe HTML nele
 			if(typeof this.options.content == 'object' && $(this.options.content).html().length != 0) {
 				//Cria html
-				this.createHtml($(this.options.content).html());
+				this.create($(this.options.content).html());
 			}
 
 			//Caso tenha passado conteúdo tipo "string" e se existe conteúdo
 			else if(typeof this.options.content == "string" && this.options.content.length != 0) {
 				//Cria html
-				this.createHtml(this.options.content);
+				this.create(this.options.content);
 			}
 
 			//Caso venha nulo
@@ -176,13 +179,13 @@
 		}
 	};
 
-	//Construção do HTML de acordo com as opções passadas
-	Plugin.prototype.createHtml = function(htmlInside) {
+	//Construção do HTML de acordo com as opções passadas e continua execução
+	Plugin.prototype.create = function(htmlInside) {
 		//Utilizado para poder chamar funções do plugin dentro de callbacks do jQuery
 		var _this = this;
 
 		//Estrutura html
-		html = '<div id="' + pluginName + '">';
+		var html = '<div id="' + pluginName + '">';
 			html += '<div id="' + pluginName + '_container">';
 				//Topo com título
 				html += '<div class="' + this.prefix + 'header">';
@@ -204,6 +207,8 @@
 		//Cria DOM
 		this.modalElement = $(html).appendTo('body');
 
+		//Aplica ações padrões
+
 		//Truque para executar qualquer aplicação
 		//de plugins visuais (como selectbox estilizado).
 		//O width e height dos elementos só é calculado
@@ -223,7 +228,7 @@
 
 		//Calcula o centro do modal
 		if(this.options.center == true) {
-			this.centerModal();
+			this.centralize();
 		}
 
 		//Exibe o modal
@@ -240,13 +245,28 @@
 	};
 
 	//Centralizar o modal de acordo com sua altura e largura
-	Plugin.prototype.centerModal = function() {
+	Plugin.prototype.centralize = function() {
 		this.modalElement.css({
 			'top': '50%', 
 			'left': '50%', 
 			'margin-left': this.modalElement.outerWidth() / -2,
 			'margin-top': this.modalElement.outerHeight() / -2
 		});
+	};
+
+	/*
+	 * Ações padrões
+	 * =============
+	 */
+
+	//Controle de ações padrões do modal
+	Plugin.prototype.doActions = function() {
+
+	};
+
+	//Ação executada para fechar o modal
+	Plugin.prototype.closeModal = function() {
+
 	};
 
 	/*
@@ -370,7 +390,6 @@
 		return $(document.getElementById(this.prefix + 'blackout')).fadeOut(this.options.fadespeed);
 	};
 
-
 	/*
 	 * Outros
 	 * ======
@@ -385,6 +404,5 @@
 			$.data(this, 'plugin_' + pluginName, new Plugin( this, options ));
 		});
 	};
-
 
 }(jQuery, window));
