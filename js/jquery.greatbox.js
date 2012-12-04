@@ -27,12 +27,14 @@
 		addclass: "",				//Adiciona novas classes ao elemento pai do modal
 		fadespeed: 200,				//Velocidade das animações de fading, 0 para desativar
 		errordisplaytime: 6500,		//Tempo de exibição dos erros na tela, até ele desaparecer. 0 para deixar sempre exibido.
-		center: true,				//Centralizar o modal no meio da página?
+		centralize: true,			//Centralizar o modal no meio da página?
 		removepagescroll: false,	//Remover o scroll da página quando estiver com o modal?
 
 		//Customização do comportamento
 		buttons: null,				//Botões customizáveis que ficam no rodapé do modal
 		content: null,				//Conteúdo que será plotado no modal. Pode ser string ou elemento jquery
+		closeonesc: true,			//Fechar o modal ao apertar ESC?
+		closeinoutside: true,		//Fechar modal ao clicar do lado de fora (blackout)?
 
 		//Ajax
 		ajax: null,					//Habilita ajax. Se for "true", pegar URL do href ou data-ajaxurl. "False" para forçar desabilitação.
@@ -53,14 +55,14 @@
 
 	//Construtor
 	function Plugin(element, options) {
-		//Prefixo utilizado nas classes e ids
-		this.prefix = pluginName + '_';
-
 		//Variáveis a serem utilizadas pelo plugin
 		this._defaults = defaults;	//As opções padrões inalteradas
 		this._name = pluginName;	//Nome do plugin
 		this.element = $(element);	//O elemento que chamou o modal
 		this.modalElement = $('');	//O próprio modal, assim que for criado
+
+		//Prefixo utilizado nas classes e ids
+		this.prefix = this._name + '_';
 
 		//Extendendo as opções
 		this.options = $.extend({}, defaults, options);
@@ -208,6 +210,7 @@
 		this.modalElement = $(html).appendTo('body');
 
 		//Aplica ações padrões
+		this.doActions();
 
 		//Truque para executar qualquer aplicação
 		//de plugins visuais (como selectbox estilizado).
@@ -227,7 +230,7 @@
 		}
 
 		//Calcula o centro do modal
-		if(this.options.center == true) {
+		if(this.options.centralize == true) {
 			this.centralize();
 		}
 
@@ -261,12 +264,51 @@
 
 	//Controle de ações padrões do modal
 	Plugin.prototype.doActions = function() {
+		//Utilizado para poder chamar funções do plugin dentro de callbacks do jQuery
+		var _this = this;
 
+		//Sair ao apertar ESC - utilizado keydown em detrimento do 
+		if(this.options.closeonesc == true) {
+			//keypress por causa de bug do chrome 
+			//http://code.google.com/p/chromium/issues/detail?id=12744
+			$(document)
+				.off('keydown.' + this._name + 'esc')					//Previne de múltiplos keypress
+				.on('keydown.' + this._name + 'esc', function (e) {		//Atribui um nome ao evento para poder ser removido posteriormente
+					if (e.keyCode == 27) {								//27 = ESC
+						_this.close();
+					}
+				});
+		}
+
+		//Fechar modal ao clicar do lado de fora (blackout)
+		if(this.options.closeinoutside) {
+			$('body')
+				.off('click.' + this._name + 'outside')					//Previne de múltiplos clicks
+				.on('click.' + this._name + 'outside', function(event){	//Atribui um nome ao evento para poder ser removido posteriormente
+					if(event.target.getAttribute('id') == _this.prefix + 'blackout') {
+						_this.close();
+					}
+				});
+		}
 	};
 
 	//Ação executada para fechar o modal
-	Plugin.prototype.closeModal = function() {
+	Plugin.prototype.close = function() {
+		//Utilizado para poder chamar funções do plugin dentro de callbacks do jQuery
+		var _this = this;
 
+		//Remove keybinds
+		$(document).off('keydown.' + this._name + 'esc');			//Esc key
+		$('body').off('click.' + this._name + 'outside');			//Click outside
+
+		//Fecha modal
+		this.modalElement.fadeTo(this.options.fadespeed, 0, function(){
+			_this.modalElement.remove();							//Remove para limpar memória e keybinds
+		});
+
+		//Fecha blackout e loading
+		this.hideBlackout();
+		this.hideLoading();
 	};
 
 	/*
