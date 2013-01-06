@@ -291,6 +291,11 @@
 			_this.modalElement.remove();							//Remove para limpar memória e keybinds
 		});
 
+		//Volta com o scroll da página
+		if(this.options.removepagescroll == true) {
+			$('body, html').css({'overflow':''});
+		}
+
 		//Fecha blackout e loading
 		if(!closeOpt.force)
 			this.hideBlackout();
