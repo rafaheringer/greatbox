@@ -9,6 +9,8 @@ Releases:
 06.01.2013
 +	Fechar o modal pelo botão padrão "Fechar"
 +	Fechar modal aberto anteriormente ao abrir um novo
++	Opções de classes para o modal
++	Método para definir opções padrões ( ex.: $.greatBox.setDefaults({opt1: val1}); )
 
 03.12.2012
 +	Método para fechar modal
@@ -38,10 +40,7 @@ List to do:
 +	Tipos padrões de modal ( ex.: success, alert, error, question e default )
 +	Botões padrões de acordo com o tipo do modal
 +	Adicionar exemplos na documentação com jsFiddle
-+	Método para definir opções padrões ( ex.: $.greatBox.setDefaults({opt1: val1}); )
-+	Opções de classes para o modal e para o blackout
 +	Opção para criar botões de ações personalizados ( ex.: [ {name: 'btn1', class="newClass", action: function(){}} ] )
-+	Opção de posicionamento automático
 +	Opção de posição ( center, vcenter, hcenter, none )
 +	Opções de texto para botões padrões e link de fechar
 +	Botar opção de slideUpUp, slideDownDown, slideUpDown, além do padrão fadeInOut para animações

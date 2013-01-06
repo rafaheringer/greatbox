@@ -16,49 +16,13 @@
 	//Nome do plugin
 	var pluginName = "greatbox";
 
-	//Opções padrões
-	var defaults = {
-		//Callbacks
-		onshow: null, 				//Callback que será executado logo que o html for exibido na tela
-		onclose: null,				//Callback que será executado assim que o modal receber evento para se fechar
-		oncreate: null,				//Callback que será executado quando o html for criado no DOM, mas ainda não exibido
-
-		//Customização visual
-		addclass: "",				//Adiciona novas classes ao elemento pai do modal
-		fadespeed: 200,				//Velocidade das animações de fading, 0 para desativar
-		errordisplaytime: 6500,		//Tempo de exibição dos erros na tela, até ele desaparecer. 0 para deixar sempre exibido.
-		centralize: true,			//Centralizar o modal no meio da página?
-		removepagescroll: false,	//Remover o scroll da página quando estiver com o modal?
-
-		//Customização do comportamento
-		buttons: null,				//Botões customizáveis que ficam no rodapé do modal
-		content: null,				//Conteúdo que será plotado no modal. Pode ser string ou elemento jquery
-		closeonesc: true,			//Fechar o modal ao apertar ESC?
-		closeinoutside: true,		//Fechar modal ao clicar do lado de fora (blackout)?
-		closebutton: true,			//Botão de fechar
-
-		//Ajax
-		ajax: null,					//Habilita ajax. Se for "true", pegar URL do href ou data-ajaxurl. "False" para forçar desabilitação.
-		ajaxcache: true,			//Habilita cache para ajax
-		ajaxdata: null,				//Dados para serem passados por ajax
-		ajaxbeforesend: null,		//Função de callback padrão para jquery ajax
-		ajaxcomplete: null,			//Função de callback padrão para jquery ajax
-		ajaxerror: null,			//Função de callback padrão para jquery ajax
-
-		//Textos
-		ajaxerrortext: 'Ops! Algum erro ocorreu com a requisição',	//Erro no ajax
-		contenterror: 'Ops! Parece que o conteúdo está vazio...',	//Texto caso ocorra erro qualquer com conteúdo
-		loadingtext: 'Carregando...',								//Texto padrão para "carregando"
-		closebuttontext: 'Fechar'									//Botão de fechar
-	};
-
 	//Controles de Timeout e Interval
 	var ERRORPID = null;
 
 	//Construtor
 	function Plugin(element, options) {
 		//Variáveis a serem utilizadas pelo plugin
-		this._defaults = defaults;	//As opções padrões inalteradas
+		this._defaults = $[pluginName].defaultOptions;	//As opções padrões inalteradas
 		this._name = pluginName;	//Nome do plugin
 		this.element = $(element);	//O elemento que chamou o modal
 		this.modalElement = $('');	//O próprio modal, assim que for criado
@@ -67,7 +31,7 @@
 		this.prefix = this._name + '_';
 
 		//Extendendo as opções
-		this.options = $.extend({}, defaults, options);
+		this.options = $.extend({}, $[pluginName].defaultOptions, options);
 
 		//Verifica atributos no elemento (///TODO: Parse para transformar string de callbacks em funções)
 		$.extend(this.options, this.element.data());
@@ -459,6 +423,47 @@
 	 * ======
 	 */
 	 
+	//Método para criação de opções padrões
+	$[pluginName] = {
+		defaultOptions: {
+			//Callbacks
+			onshow: null, 				//Callback que será executado logo que o html for exibido na tela
+			onclose: null,				//Callback que será executado assim que o modal receber evento para se fechar
+			oncreate: null,				//Callback que será executado quando o html for criado no DOM, mas ainda não exibido
+
+			//Customização visual
+			addclass: "",				//Adiciona novas classes ao elemento pai do modal
+			fadespeed: 200,				//Velocidade das animações de fading, 0 para desativar
+			errordisplaytime: 6500,		//Tempo de exibição dos erros na tela, até ele desaparecer. 0 para deixar sempre exibido.
+			centralize: true,			//Centralizar o modal no meio da página?
+			removepagescroll: false,	//Remover o scroll da página quando estiver com o modal?
+
+			//Customização do comportamento
+			buttons: null,				//Botões customizáveis que ficam no rodapé do modal
+			content: null,				//Conteúdo que será plotado no modal. Pode ser string ou elemento jquery
+			closeonesc: true,			//Fechar o modal ao apertar ESC?
+			closeinoutside: true,		//Fechar modal ao clicar do lado de fora (blackout)?
+			closebutton: true,			//Botão de fechar
+
+			//Ajax
+			ajax: null,					//Habilita ajax. Se for "true", pegar URL do href ou data-ajaxurl. "False" para forçar desabilitação.
+			ajaxcache: true,			//Habilita cache para ajax
+			ajaxdata: null,				//Dados para serem passados por ajax
+			ajaxbeforesend: null,		//Função de callback padrão para jquery ajax
+			ajaxcomplete: null,			//Função de callback padrão para jquery ajax
+			ajaxerror: null,			//Função de callback padrão para jquery ajax
+
+			//Textos
+			ajaxerrortext: 'Ops! Algum erro ocorreu com a requisição',	//Erro no ajax
+			contenterror: 'Ops! Parece que o conteúdo está vazio...',	//Texto caso ocorra erro qualquer com conteúdo
+			loadingtext: 'Carregando...',								//Texto padrão para "carregando"
+			closebuttontext: 'Fechar'									//Botão de fechar
+		},
+		setDefaults: function(options) {
+			this.defaultOptions = $.extend({}, this.defaultOptions, options);
+		}
+	};
+
 	//Criação do plugin em jQuery
 	$.fn[pluginName] = function(options) {
 		//Verifica se o elemento usado existe
@@ -469,5 +474,7 @@
 			$.data(this, 'plugin_' + pluginName, new Plugin( this, options ));
 		});
 	};
+
+
 
 }(jQuery, window));

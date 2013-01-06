@@ -11,6 +11,11 @@
 		$(document).ready(function(){
 			/* Demonstrações  */
 
+			//Seta padrões para todos os modais
+			$.greatbox.setDefaults({
+				removepagescroll: true
+			});
+
 			//Modal simples
 			$('#teste1').greatbox({
 				content: "<h1>Página de modal com HTML imbutido</h1><p>Parágrafo de exemplo.</p>"
