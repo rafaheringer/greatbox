@@ -46,7 +46,7 @@
 		var _this = this;
 
 		//Verifica se será executado como ajax
-		if(this.options.ajax === null) {
+		if(this.options.ajax === null && typeof this.element.attr('href') != 'undefined') {
 			//Verifica se a URL do elemento não é um hash ou javascript
 			if( this.element.attr('href').split('')[0] != '#' && this.element.attr('href').indexOf('javascript:') == -1 && this.element.attr('href') != '')
 				this.options.ajax = this.element.attr('href');
@@ -68,7 +68,6 @@
 			//Começa o modal
 			this.start();
 		}
-		
 	};
 
 	//Primeiros passos para criação do modal
@@ -82,6 +81,8 @@
 			this.close({force: true});
 		}
 
+		//Atualiza opções resgatáveis
+		$[pluginName].openedModal = this.element;
 
 		//Exibe blackout
 		this.showBlackout();
@@ -296,6 +297,9 @@
 			$('body, html').css({'overflow':''});
 		}
 
+		//Atualiza opções resgatáveis
+		$[pluginName].openedModal = null;
+
 		//Fecha blackout e loading
 		if(!closeOpt.force)
 			this.hideBlackout();
@@ -430,6 +434,7 @@
 	 
 	//Método para criação de opções padrões
 	$[pluginName] = {
+		//Opções padrões
 		defaultOptions: {
 			//Callbacks
 			onshow: null, 				//Callback que será executado logo que o html for exibido na tela
@@ -464,8 +469,20 @@
 			loadingtext: 'Carregando...',								//Texto padrão para "carregando"
 			closebuttontext: 'Fechar'									//Botão de fechar
 		},
+
+		//Modal atual aberto
+		openedModal: null,
+
+		//Método para definir as opções padrões
 		setDefaults: function(options) {
-			this.defaultOptions = $.extend({}, this.defaultOptions, options);
+			return this.defaultOptions = $.extend({}, this.defaultOptions, options);
+		},
+
+		//Método para fechar modal
+		close: function() {
+			if($[pluginName].openedModal) {
+				return $[pluginName].openedModal.data('plugin_' + pluginName).close();
+			}
 		}
 	};
 
@@ -479,7 +496,5 @@
 			$.data(this, 'plugin_' + pluginName, new Plugin( this, options ));
 		});
 	};
-
-
 
 }(jQuery, window));

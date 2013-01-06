@@ -11,6 +11,8 @@ Releases:
 +	Fechar modal aberto anteriormente ao abrir um novo
 +	Opções de classes para o modal
 +	Método para definir opções padrões ( ex.: $.greatBox.setDefaults({opt1: val1}); )
++	Modal abrir automaticamente quando a página carrega ou de forma anônima ( ex.: $.greatBox(); )
++	Método para fechar o modal via javascript
 
 03.12.2012
 +	Método para fechar modal
@@ -35,7 +37,6 @@ Releases:
 List to do:
 -----------
 +	Sistema inteligente de cálculo (ativado manualmente) para conteúdos maiores que a página
-+	Modal abrir automaticamente quando a página carrega ou de forma anônima ( ex.: $.greatBox(); )
 +	Modal ser ativado por elementos com classe ( ex.: <a href="ajax.html" class="greatBoxLink" /> )
 +	Tipos padrões de modal ( ex.: success, alert, error, question e default )
 +	Botões padrões de acordo com o tipo do modal
