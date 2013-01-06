@@ -84,13 +84,13 @@
 		//Verifica se será executado como ajax
 		if(this.options.ajax === null) {
 			//Verifica se a URL do elemento não é um hash ou javascript
-			if( this.element.attr('href').split('')[0] != '#' && this.element.attr('href').indexOf('javascript:') == -1 )
+			if( this.element.attr('href').split('')[0] != '#' && this.element.attr('href').indexOf('javascript:') == -1 && this.element.attr('href') != '')
 				this.options.ajax = this.element.attr('href');
 		}
 
 		//Caso seja elemento, dispara no click
 		if (this.element.length) {
-			this.element.on('click', function(event) {
+			this.element.on('click.' + this._name, function(event) {
 				//Começa o modal
 				_this.start();
 
@@ -113,6 +113,11 @@
 		var _this = this;
 
 		//Previne que exista mais de um modal na tela
+		if(document.getElementById(this._name)) {
+			this.modalElement = $(document.getElementById(this._name));
+			this.close({force: true});
+		}
+
 
 		//Exibe blackout
 		this.showBlackout();
@@ -304,21 +309,27 @@
 	};
 
 	//Ação executada para fechar o modal
-	Plugin.prototype.close = function() {
+	Plugin.prototype.close = function(closeOpt) {
 		//Utilizado para poder chamar funções do plugin dentro de callbacks do jQuery
 		var _this = this;
+
+		//Opções secundárias para o função de fechar
+		closeOpt = $.extend({
+			force: false
+		}, closeOpt);
 
 		//Remove keybinds
 		$(document).off('keydown.' + this._name + 'esc');			//Esc key
 		$('body').off('click.' + this._name + 'outside');			//Click outside
 
 		//Fecha modal
-		this.modalElement.fadeTo(this.options.fadespeed, 0, function(){
+		this.modalElement.fadeTo(closeOpt.force ? 0 : this.options.fadespeed, 0, function(){
 			_this.modalElement.remove();							//Remove para limpar memória e keybinds
 		});
 
 		//Fecha blackout e loading
-		this.hideBlackout();
+		if(!closeOpt.force)
+			this.hideBlackout();
 		this.hideLoading();
 	};
 

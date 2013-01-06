@@ -6,7 +6,11 @@ Releases:
 ---------
 ### Current development ###
 
-0.3.12.2012
+06.01.2013
++	Fechar o modal pelo botão padrão "Fechar"
++	Fechar modal aberto anteriormente ao abrir um novo
+
+03.12.2012
 +	Método para fechar modal
 +	Fechar modal com a tecla "ESC"
 +	Fechar modal clicando do lado de fora
@@ -31,11 +35,9 @@ List to do:
 +	Sistema inteligente de cálculo (ativado manualmente) para conteúdos maiores que a página
 +	Modal abrir automaticamente quando a página carrega ou de forma anônima ( ex.: $.greatBox(); )
 +	Modal ser ativado por elementos com classe ( ex.: <a href="ajax.html" class="greatBoxLink" /> )
-+	Fechar o modal pelo botão padrão "Fechar"
 +	Tipos padrões de modal ( ex.: success, alert, error, question e default )
 +	Botões padrões de acordo com o tipo do modal
 +	Adicionar exemplos na documentação com jsFiddle
-+	Fechar modal aberto anteriormente ao abrir um novo
 +	Método para definir opções padrões ( ex.: $.greatBox.setDefaults({opt1: val1}); )
 +	Opções de classes para o modal e para o blackout
 +	Opção para criar botões de ações personalizados ( ex.: [ {name: 'btn1', class="newClass", action: function(){}} ] )
