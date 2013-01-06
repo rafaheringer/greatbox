@@ -23,6 +23,11 @@
 	z-index: 1000; /* Controle de profundidade na tela */
 }
 
+/* Relativo para todos os elementos internos se comportarem */
+#greatbox_container {
+	position: relative;
+}
+
 /* Posição fixa na tela, sem que seja afetado pelo scroll */
 #greatbox_blackout,
 #greatbox_error,
@@ -88,6 +93,15 @@
 .greatbox_errorText {
 	padding: 5px 0px;
 	display: block;
+}
+
+.greatbox_closeButton {
+	position: absolute;
+	display: block;
+	top: 0;
+	right: 0;
+	background: white;
+	padding: 5px;
 }
 
 /*/////////////////////////////////////////////////*/

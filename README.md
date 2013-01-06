@@ -5,10 +5,12 @@ A great jquery lighbox plugin
 Releases:
 ---------
 ### Current development ###
+
 0.3.12.2012
 +	Método para fechar modal
 +	Fechar modal com a tecla "ESC"
 +	Fechar modal clicando do lado de fora
++	Callback onclose ( quando o modal é fechado )
 
 01.12.2012
 +	Criação da base do plugin
@@ -40,7 +42,6 @@ List to do:
 +	Opção de posicionamento automático
 +	Opção de posição ( center, vcenter, hcenter, none )
 +	Opções de texto para botões padrões e link de fechar
-+	Callback onclose ( quando o modal é fechado )
 +	Botar opção de slideUpUp, slideDownDown, slideUpDown, além do padrão fadeInOut para animações
 
 Links de estudo e referências:

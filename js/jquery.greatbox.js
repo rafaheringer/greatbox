@@ -35,6 +35,7 @@
 		content: null,				//Conteúdo que será plotado no modal. Pode ser string ou elemento jquery
 		closeonesc: true,			//Fechar o modal ao apertar ESC?
 		closeinoutside: true,		//Fechar modal ao clicar do lado de fora (blackout)?
+		closebutton: true,			//Botão de fechar
 
 		//Ajax
 		ajax: null,					//Habilita ajax. Se for "true", pegar URL do href ou data-ajaxurl. "False" para forçar desabilitação.
@@ -47,7 +48,8 @@
 		//Textos
 		ajaxerrortext: 'Ops! Algum erro ocorreu com a requisição',	//Erro no ajax
 		contenterror: 'Ops! Parece que o conteúdo está vazio...',	//Texto caso ocorra erro qualquer com conteúdo
-		loadingtext: 'Carregando...'								//Texto padrão para "carregando"
+		loadingtext: 'Carregando...',								//Texto padrão para "carregando"
+		closebuttontext: 'Fechar'									//Botão de fechar
 	};
 
 	//Controles de Timeout e Interval
@@ -187,7 +189,7 @@
 		var _this = this;
 
 		//Estrutura html
-		var html = '<div id="' + pluginName + '">';
+		var html = '<div id="' + pluginName + '" class="' + this.options.addclass + '">';
 			html += '<div id="' + pluginName + '_container">';
 				//Topo com título
 				html += '<div class="' + this.prefix + 'header">';
@@ -196,6 +198,8 @@
 				//Conteúdo
 				html += '<div class="' + this.prefix + 'content">';
 					html += '<div class="' + this.prefix + 'contentContainer">';
+						if(this.options.closebutton)
+							html += '<span class="' + this.prefix + 'closeButton"><a href="javascript:;">' + this.options.closebuttontext +  '</a></span>';
 						html += htmlInside;
 					html += '</div>';
 				html += '</div>';
@@ -268,7 +272,7 @@
 		var _this = this;
 
 		//Sair ao apertar ESC - utilizado keydown em detrimento do 
-		if(this.options.closeonesc == true) {
+		if(this.options.closeonesc) {
 			//keypress por causa de bug do chrome 
 			//http://code.google.com/p/chromium/issues/detail?id=12744
 			$(document)
@@ -289,6 +293,13 @@
 						_this.close();
 					}
 				});
+		}
+
+		//Fechar ao clicar em "fechar"
+		if(this.options.closebutton) {
+			$('.' + this.prefix + 'closeButton', this.modalElement).on('click.' + this._name, function(event) {
+				_this.close();
+			});
 		}
 	};
 
@@ -436,6 +447,7 @@
 	 * Outros
 	 * ======
 	 */
+	 
 	//Criação do plugin em jQuery
 	$.fn[pluginName] = function(options) {
 		//Verifica se o elemento usado existe
