@@ -1,6 +1,6 @@
 jQuery GreatBox
 ===============
-A great jquery lighbox plugin
+A great jquery lightbox plugin
 
 Releases:
 ---------
