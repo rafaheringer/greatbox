@@ -5,11 +5,11 @@ A great jquery lightbox plugin
 Releases:
 ---------
 ### Current development ###
-+	Adicionado segunda opção de animação, puffInIn, para "effect"
 
 27.01.2012
 +	Modal ser ativado por elementos com classe ( ex.: <a href="ajax.html" class="greatbox-enabled" /> )
 +	Classe "greatbox-enabled" adicionado aos elementos que possuirem a ativação do plugin
++	Adicionado segunda opção de animação, puffInIn, para "effect"
 
 06.01.2013
 +	Fechar o modal pelo botão padrão "Fechar"
@@ -49,6 +49,7 @@ List to do:
 +	Opção de posição ( center, vcenter, hcenter, none )
 +	Opções de texto para botões padrões e link de fechar
 +	Botar opção de slideUpUp, slideDownDown, slideUpDown, além do padrão fadeInOut para animações
++	Adicionar opção de plugin "easing"
 
 Links de estudo e referências:
 ------------------------------
