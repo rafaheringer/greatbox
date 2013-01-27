@@ -115,11 +115,6 @@
 					//Plota erro no console
 					if(typeof console != 'undefined') console.error('url:', _this.options.ajax, ' jqXHR:', jqXHR, ' textStatus:', textStatus, ' errorThrown:', errorThrown);
 
-					//Exibe erro
-					if(_this.options.ajaxerrortext) {
-						_this.showError(_this.options.ajaxerrortext);
-					}
-
 					//Executa callback do usuário
 					if (typeof eval(_this.options.errorCallback) == 'function') {
 						$.fn.callback = _this.options.errorCallback;
@@ -149,7 +144,7 @@
 
 			//Caso venha nulo
 			else {
-				this.showError(this.options.contenterror);
+				if(typeof console != 'undefined') console.error('url:', _this.options.ajax, 'message:', this.options.contenterror);
 			}
 		}
 	};
@@ -199,47 +194,19 @@
 			$(this.modalElement).callback();
 		}
 
-		//Remove o scroll da página
-		if(this.options.removepagescroll == true) {
-			$('body, html').css({'overflow':'hidden'});
-		}
-
 		//Calcula o centro do modal
 		if(this.options.centralize == true) {
 			this.centralize();
 		}
 
-		//Opções que podem ser utilizadas nas animações
-		//PID usado para controlar callback após animação escolhida
-		var animationOpt = {PID: null};
-		
-		//Exibe o modal, escolhendo o tipo de animação
-		switch(this.options.effect) {
-			//Fade in e fade out
-			case 'fadeInOut':
-				animationOpt.PID = this.modalElement.fadeTo(this.options.duration, 1);
-			break;
-
-			//Puff out e puff in (css 3)
-			case 'puffInOut':
-			case 'puffInIn':
-				//Animação
-				animationOpt.PID = this.modalElement.animate({'opacity': 1}, {
-					step: function(now, fx) {
-						$(this).css({transform: 'scale(' + ( 1 + (fx.end - now) ) + ')'});
-					},
-					duration: this.options.duration
-				});
-			break;
-		}
-
-		//Callback onShow
-		if (typeof eval(_this.options.onShow) == 'function') {
-			$.when(animationOpt.PID).done(function(){
+		//Exibe o modal
+		this.modalElement.fadeTo(this.options.duration, 1, function(){
+			//Callback onShow
+			if (typeof eval(_this.options.onShow) == 'function') {
 				$.fn.callback = _this.options.onShow;
 				$(_this.modalElement).callback();				
-			});
-		}
+			}
+		});
 
 		//Retorno
 		return html;
@@ -311,49 +278,10 @@
 		$(document).off('keydown.' + this._name + 'esc');			//Esc key
 		$('body').off('click.' + this._name + 'outside');			//Click outside
 
-		//Opções que podem ser utilizadas nas animações
-		//PID usado para controlar callback após animação escolhida
-		var animationOpt = {PID: null};
-
-		//Fecha modal, escolhendo o tipo de animação
-		switch(this.options.effect) {
-			//Fade in e fade out
-			case 'fadeInOut':
-				animationOpt.PID = this.modalElement.fadeTo(closeOpt.force ? 0 : this.options.duration, 0);
-			break;
-
-			//Puff out e puff in (css 3)
-			case 'puffInOut':
-				//Animação
-				animationOpt.PID = this.modalElement.animate({'opacity': 0}, {
-					step: function(now, fx) {
-						$(this).css({transform: 'scale(' + ( 2 + (now * -1) ) + ')'});
-					},
-					duration: closeOpt.force ? 0 : this.options.duration
-				});
-			break;
-
-			//Puff out e puff in (css 3)
-			case 'puffInIn':
-				//Animação
-				animationOpt.PID = this.modalElement.animate({'opacity': 0}, {
-					step: function(now, fx) {
-						$(this).css({transform: 'scale(' + now + ')'});
-					},
-					duration: closeOpt.force ? 0 : this.options.duration
-				});
-			break;
-		}
-
-		//Callback
-		$.when(animationOpt.PID).done(function(){
-			_this.modalElement.remove();		
+		//Fecha modal
+		this.modalElement.fadeTo(closeOpt.force ? 0 : this.options.duration, 0, function() {
+			_this.modalElement.remove();
 		});
-
-		//Volta com o scroll da página
-		if(this.options.removepagescroll == true) {
-			$('body, html').css({'overflow':''});
-		}
 
 		//Atualiza opções resgatáveis
 		$[pluginName].openedModal = null;
@@ -369,50 +297,6 @@
 	 * Loading e erros
 	 * ===============
 	 */
-
-	//Chama elemento de erro
-	Plugin.prototype.showError = function(text) {
-		//Utilizado para poder chamar funções do plugin dentro de callbacks do jQuery
-		var _this = this;
-
-		var errorElement = document.getElementById(this.prefix + 'error');
-
-		//Verifica se já não existe um erro
-		if ( errorElement ) {
-			errorElement = $(document.getElementById(this.prefix + 'error')).fadeIn(this.options.duration);
-		}
-
-		//Caso não exista o loading
-		else {
-			//Cria html do loading
-			var html = '<div id="' + this.prefix + 'error">';
-				html += '<div class="' + this.prefix + 'errorContainer">';
-					html += '<span class="' + this.prefix + 'errorText">';
-					html += '<span>';
-				html += '</div>';
-			html += '</div>';
-
-			//Adiciona na página com fade
-			errorElement = $(html).appendTo('body');
-			errorElement.fadeOut(0).fadeIn(this.options.duration);
-		}
-
-		//Plota texto
-		$('.' + this.prefix + 'errorText', errorElement).html(text);
-
-		//Esconde blackout (///TODO: Esconder somente se não existir modal na tela)
-		_this.hideBlackout();
-
-		//Esconde o erro depois de alguns segundos
-		if(this.options.errordisplaytime != 0) {
-			clearTimeout(ERRORPID);
-			ERRORPID = setTimeout(function() {
-				errorElement.fadeOut(_this.options.duration);
-			}, this.options.errordisplaytime);
-		}
-
-		return errorElement;
-	};
 
 	//Chama loading
 	Plugin.prototype.showLoading = function() {
@@ -475,9 +359,6 @@
 
 		}
 
-		//Blackout, usado para "tapar" o site
-		
-
 		return blackoutElement;
 	};
 
@@ -505,8 +386,6 @@
 			duration: 200,				//Velocidade das animações de fading, 0 para desativar
 			errordisplaytime: 6500,		//Tempo de exibição dos erros na tela, até ele desaparecer. 0 para deixar sempre exibido.
 			centralize: true,			//Centralizar o modal no meio da página?
-			removepagescroll: false,	//Remover o scroll da página quando estiver com o modal?
-			effect: 'fadeInOut',		//Tipo de animação utilizado na abertura e fechamento do modal (fadeInOut, puffInIn, puffInOut)
 
 			//Customização do comportamento
 			buttons: null,				//Botões customizáveis que ficam no rodapé do modal

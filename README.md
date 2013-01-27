@@ -50,6 +50,7 @@ List to do:
 +	Opções de texto para botões padrões e link de fechar
 +	Botar opção de slideUpUp, slideDownDown, slideUpDown, além do padrão fadeInOut para animações
 +	Adicionar opção de plugin "easing"
++	Fazer modal navegável, modificando hashtag e podendo usar o "ir" e "voltar" do navegador
 
 Links de estudo e referências:
 ------------------------------
