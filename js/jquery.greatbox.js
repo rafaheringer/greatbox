@@ -211,14 +211,37 @@
 			this.centralize();
 		}
 
-		//Exibe o modal
-		this.modalElement.fadeTo(this.options.fadespeed, 1, function(){
-			//Callback onShow
-			if (typeof eval(_this.options.onShow) == 'function') {
+		//Opções que podem ser utilizadas nas animações
+		//PID usado para controlar callback após animação escolhida
+		var animationOpt = {PID: null};
+		
+		//Exibe o modal, escolhendo o tipo de animação
+		switch(this.options.effect) {
+			//Fade in e fade out
+			case 'fadeInOut':
+				animationOpt.PID = this.modalElement.fadeTo(this.options.duration, 1);
+			break;
+
+			//Puff out e puff in (css 3)
+			case 'puffInOut':
+			case 'puffInIn':
+				//Animação
+				animationOpt.PID = this.modalElement.animate({'opacity': 1}, {
+					step: function(now, fx) {
+						$(this).css({transform: 'scale(' + ( 1 + (fx.end - now) ) + ')'});
+					},
+					duration: this.options.duration
+				});
+			break;
+		}
+
+		//Callback onShow
+		if (typeof eval(_this.options.onShow) == 'function') {
+			$.when(animationOpt.PID).done(function(){
 				$.fn.callback = _this.options.onShow;
-				$(_this.modalElement).callback();
-			}
-		});
+				$(_this.modalElement).callback();				
+			});
+		}
 
 		//Retorno
 		return html;
@@ -290,9 +313,43 @@
 		$(document).off('keydown.' + this._name + 'esc');			//Esc key
 		$('body').off('click.' + this._name + 'outside');			//Click outside
 
-		//Fecha modal
-		this.modalElement.fadeTo(closeOpt.force ? 0 : this.options.fadespeed, 0, function(){
-			_this.modalElement.remove();							//Remove para limpar memória e keybinds
+		//Opções que podem ser utilizadas nas animações
+		//PID usado para controlar callback após animação escolhida
+		var animationOpt = {PID: null};
+
+		//Fecha modal, escolhendo o tipo de animação
+		switch(this.options.effect) {
+			//Fade in e fade out
+			case 'fadeInOut':
+				animationOpt.PID = this.modalElement.fadeTo(closeOpt.force ? 0 : this.options.duration, 1);
+			break;
+
+			//Puff out e puff in (css 3)
+			case 'puffInOut':
+				//Animação
+				animationOpt.PID = this.modalElement.animate({'opacity': 0}, {
+					step: function(now, fx) {
+						$(this).css({transform: 'scale(' + ( 2 + (now * -1) ) + ')'});
+					},
+					duration: closeOpt.force ? 0 : this.options.duration
+				});
+			break;
+
+			//Puff out e puff in (css 3)
+			case 'puffInIn':
+				//Animação
+				animationOpt.PID = this.modalElement.animate({'opacity': 0}, {
+					step: function(now, fx) {
+						$(this).css({transform: 'scale(' + now + ')'});
+					},
+					duration: closeOpt.force ? 0 : this.options.duration
+				});
+			break;
+		}
+
+		//Callback
+		$.when(animationOpt.PID).done(function(){
+			_this.modalElement.remove();		
 		});
 
 		//Volta com o scroll da página
@@ -304,8 +361,9 @@
 		$[pluginName].openedModal = null;
 
 		//Fecha blackout e loading
-		if(!closeOpt.force)
+		if(!closeOpt.force) {
 			this.hideBlackout();
+		}
 		this.hideLoading();
 	};
 
@@ -323,7 +381,7 @@
 
 		//Verifica se já não existe um erro
 		if ( errorElement ) {
-			errorElement = $(document.getElementById(this.prefix + 'error')).fadeIn(this.options.fadespeed);
+			errorElement = $(document.getElementById(this.prefix + 'error')).fadeIn(this.options.duration);
 		}
 
 		//Caso não exista o loading
@@ -338,7 +396,7 @@
 
 			//Adiciona na página com fade
 			errorElement = $(html).appendTo('body');
-			errorElement.fadeOut(0).fadeIn(this.options.fadespeed);
+			errorElement.fadeOut(0).fadeIn(this.options.duration);
 		}
 
 		//Plota texto
@@ -351,7 +409,7 @@
 		if(this.options.errordisplaytime != 0) {
 			clearTimeout(ERRORPID);
 			ERRORPID = setTimeout(function() {
-				errorElement.fadeOut(_this.options.fadespeed);
+				errorElement.fadeOut(_this.options.duration);
 			}, this.options.errordisplaytime);
 		}
 
@@ -364,7 +422,7 @@
 
 		//Verifica se já não existe um loading
 		if ( loadingElement ) {
-			loadingElement = $(document.getElementById(this.prefix + 'loading')).fadeIn(this.options.fadespeed);
+			loadingElement = $(document.getElementById(this.prefix + 'loading')).fadeIn(this.options.duration);
 		}
 
 		//Caso não exista o loading
@@ -379,7 +437,7 @@
 
 			//Adiciona na página com fade
 			loadingElement = $(html).appendTo('body');
-			loadingElement.fadeOut(0).fadeIn(this.options.fadespeed);
+			loadingElement.fadeOut(0).fadeIn(this.options.duration);
 
 		}
 
@@ -391,7 +449,7 @@
 
 	//Cancela loading
 	Plugin.prototype.hideLoading = function() {
-		return $(document.getElementById(this.prefix + 'loading')).fadeOut(this.options.fadespeed);
+		return $(document.getElementById(this.prefix + 'loading')).fadeOut(this.options.duration);
 	};
 
 	/*
@@ -405,7 +463,7 @@
 
 		//Verifica se já não existe um blackout
 		if ( blackoutElement ) {
-			blackoutElement = $(document.getElementById(this.prefix + 'blackout')).fadeIn(this.options.fadespeed);
+			blackoutElement = $(document.getElementById(this.prefix + 'blackout')).fadeIn(this.options.duration);
 		}
 
 		//Caso não exista o blackout
@@ -415,7 +473,7 @@
 
 			//Adiciona na página com fade
 			blackoutElement = $(html).appendTo('body');
-			blackoutElement.fadeOut(0).fadeIn(this.options.fadespeed);
+			blackoutElement.fadeOut(0).fadeIn(this.options.duration);
 
 		}
 
@@ -427,7 +485,7 @@
 
 	//Cancela blackout
 	Plugin.prototype.hideBlackout = function() {
-		return $(document.getElementById(this.prefix + 'blackout')).fadeOut(this.options.fadespeed);
+		return $(document.getElementById(this.prefix + 'blackout')).fadeOut(this.options.duration);
 	};
 
 	/*
@@ -445,11 +503,12 @@
 			oncreate: null,				//Callback que será executado quando o html for criado no DOM, mas ainda não exibido
 
 			//Customização visual
-			addclass: "",				//Adiciona novas classes ao elemento pai do modal
-			fadespeed: 200,				//Velocidade das animações de fading, 0 para desativar
+			addclass: '',				//Adiciona novas classes ao elemento pai do modal
+			duration: 200,				//Velocidade das animações de fading, 0 para desativar
 			errordisplaytime: 6500,		//Tempo de exibição dos erros na tela, até ele desaparecer. 0 para deixar sempre exibido.
 			centralize: true,			//Centralizar o modal no meio da página?
 			removepagescroll: false,	//Remover o scroll da página quando estiver com o modal?
+			effect: 'fadeInOut',		//Tipo de animação utilizado na abertura e fechamento do modal (fadeInOut, puffInIn, puffInOut)
 
 			//Customização do comportamento
 			buttons: null,				//Botões customizáveis que ficam no rodapé do modal

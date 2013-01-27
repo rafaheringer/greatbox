@@ -5,6 +5,7 @@ A great jquery lightbox plugin
 Releases:
 ---------
 ### Current development ###
++	Adicionado segunda opção de animação, puffInIn, para "effect"
 
 27.01.2012
 +	Modal ser ativado por elementos com classe ( ex.: <a href="ajax.html" class="greatbox-enabled" /> )

@@ -8,13 +8,14 @@
 	<script type="text/javascript" src="js/jquery.greatbox.js"></script>
 	
 	<script type="text/javascript">
+		//Seta padrões para todos os modais
+		$.greatbox.setDefaults({
+			effect: 'puffInIn'
+		});
+
+
 		$(document).ready(function(){
 			/* Demonstrações  */
-
-			//Seta padrões para todos os modais
-			$.greatbox.setDefaults({
-				removepagescroll: true
-			});
 
 			//Modal simples
 			$('#teste1').greatbox({
@@ -84,10 +85,10 @@
 
 			<!-- Modal com opções via data -->
 			<li>
-				<a href="javascript;" id="teste4" data-ajax="ajax-call.html" data-fadeSpeed="0" data-removepagescroll="true">Modal com opções via atributo data</a>
+				<a href="javascript;" id="teste4" data-ajax="ajax-call.html" data-duration="0" data-removepagescroll="true">Modal com opções via atributo data</a>
 				<code>
 					<strong>html:</strong> <br />
-					&lt;a href="javascript;" id="teste4" data-ajax="ajax-call.html" data-fadeSpeed="500"&gt;Modal com opções via atributo data&lt;/a&gt;
+					&lt;a href="javascript;" id="teste4" data-ajax="ajax-call.html" data-duration="500"&gt;Modal com opções via atributo data&lt;/a&gt;
 				</code>
 				<code>
 					<strong>javascript:</strong> <br />
