@@ -68,6 +68,9 @@
 			//Começa o modal
 			this.start();
 		}
+
+		//Adiciona classe para sinalizar que o greatbox está ativo para o elemento
+		this.element.addClass('greatbox-enabled');
 	};
 
 	//Primeiros passos para criação do modal
@@ -496,5 +499,10 @@
 			$.data(this, 'plugin_' + pluginName, new Plugin( this, options ));
 		});
 	};
+
+	//Primeira inicialização, procura por elementos que tenham a classe "greatbox-enabled"
+	$(document).ready(function() {
+		$('.greatbox-enabled').greatbox();
+	});
 
 }(jQuery, window));

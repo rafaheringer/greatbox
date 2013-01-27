@@ -6,6 +6,10 @@ Releases:
 ---------
 ### Current development ###
 
+27.01.2012
++	Modal ser ativado por elementos com classe ( ex.: <a href="ajax.html" class="greatbox-enabled" /> )
++	Classe "greatbox-enabled" adicionado aos elementos que possuirem a ativação do plugin
+
 06.01.2013
 +	Fechar o modal pelo botão padrão "Fechar"
 +	Fechar modal aberto anteriormente ao abrir um novo
@@ -37,7 +41,6 @@ Releases:
 List to do:
 -----------
 +	Sistema inteligente de cálculo (ativado manualmente) para conteúdos maiores que a página
-+	Modal ser ativado por elementos com classe ( ex.: <a href="ajax.html" class="greatBoxLink" /> )
 +	Tipos padrões de modal ( ex.: success, alert, error, question e default )
 +	Botões padrões de acordo com o tipo do modal
 +	Adicionar exemplos na documentação com jsFiddle
