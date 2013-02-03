@@ -30,7 +30,19 @@
 			$('#teste3').greatbox({'removepagescroll': true});
 
 			//Modal com opções via data
-			$('#teste4').greatbox();
+			$('#teste4').greatbox({
+				buttons: [
+					{
+						class: 'closeBtn',
+						name: 'Fechar modal',
+						action: function() {
+							alert('Modal será fechado');
+							$.greatbox.close();
+						}
+					}
+
+				]
+			});
 		});
 	</script>
 </head>

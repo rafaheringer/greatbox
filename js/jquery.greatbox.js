@@ -184,15 +184,50 @@
 				html += '</div>';
 
 				//Rodapé e seus links de ação
-				if(this.options.buttons) {
-					html += '<div class="' + this.prefix + 'footer">';
-					html += '</div>';	
+				if(this.options.buttons && this.options.buttons instanceof Array) {
+					html += '<div class="' + this.prefix + 'footer"></div>';	
 				}
+
 			html += '</div>';
 		html += '</div>';
 
 		//Cria DOM
 		this.modalElement = $(html).appendTo('body');
+
+		//Cria botões no rodapé
+		if(this.options.buttons && this.options.buttons instanceof Array) {
+			var newButton = {},														//Html para os botões
+				thisButton = {},													//Utilizado no loop
+				_this = this,														//Utilizado para poder chamar funções do plugin dentro de callbacks do jQuery
+				footerElem = $('.' + this.prefix + 'footer', this.modalElement);	//Local onde os botões ficarão
+
+			for (var i = 0; i < this.options.buttons.length; i++) {
+				thisButton = this.options.buttons[i];
+
+				//Html
+				var newButton = '<a href="javascript:;" class="' + this.prefix + 'btn ' + thisButton.class + '">' + thisButton.name + '</a>';
+				
+				//Adiciona no footer
+				newButton = $(newButton).data(this.prefix + 'options', thisButton).appendTo(footerElem);
+
+				//Atribui evento
+            	$(newButton).on('click.' + this._name, function (e) {
+                	//Está desabilitado?
+                	if($(this).is('.disabled')) {
+                		e.preventDefault();
+                	}
+
+                	//Continua
+                	else {
+                		if(typeof $(this).data(_this.prefix + 'options').action == 'function')
+                			$(this).data(_this.prefix + 'options').action();
+                		else
+                			_this.close();
+                	}
+
+            	});
+			}
+		}
 
 		//Aplica ações padrões
 		this.doActions();
@@ -383,9 +418,8 @@
 	//Chama elemento de erro
 	Plugin.prototype.showError = function(text) {
 		//Utilizado para poder chamar funções do plugin dentro de callbacks do jQuery
-		var _this = this;
-
-		var errorElement = document.getElementById(this.prefix + 'error');
+		var _this = this,
+			errorElement = document.getElementById(this.prefix + 'error');
 
 		//Verifica se já não existe um erro
 		if ( errorElement ) {
@@ -525,7 +559,7 @@
 			closebutton: true,			//Botão de fechar
 
 			//Botões personalizados
-			buttons: null,				//Botões customizáveis que ficam no rodapé do modal
+			buttons: null,				//Botões customizáveis que ficam no rodapé do modal. Exemplo: [{class:"novo-botao", name:"Meu botão", action: "close"}]
 
 			//Ajax
 			ajax: null,					//Habilita ajax. Se for "true", pegar URL do href ou data-ajaxurl. "False" para forçar desabilitação.

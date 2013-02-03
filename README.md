@@ -2,12 +2,46 @@ jQuery GreatBox
 ===============
 A great jquery lightbox plugin
 
+Opções:
+-------
+O greatbox aceita diversas opções e é completamente flexível. 
+
+### Botões personalizados ###
++	**buttons: [{class:string, name:string, action:function}, ...]** padrão: null
+	Adiciona botões personalizados ao rodapé da página. Cada botão é simbolizado por um objeto com as seguintes propriedades:
+	class - Classe css adicional ao botão. Todos os botões já vem com a classe "greatbox_btn" por padrão.
+	name - O nome que ficará dentro do botão, como "Fechar" ou "Confirmar".
+	action - A ação executada ao clicar no botão. Poderá passar uma função ou apenas passar a string "close" para fechar o modal. Caso o botão tenha a classe "disabled", a ação não ocorrerá.
+	```javascript
+	buttons: [
+		{
+			class: 'closeBtn',
+			name: 'Fechar modal',
+			action: function() {
+				alert('Modal será fechado');
+				$.greatbox.close();
+			}
+		}, 
+		{
+			class: 'newBtn disabled',
+			name: 'Outrobotão',
+			action: function() {
+				alert('Esta ação não ocorrerá por causa da classe disabled');
+				$.greatbox.close();
+			}
+		}
+	]
+	```
+
+
 Releases:
 ---------
 ### Current development ###
 
 03.02.2012
 +	Adicionado opção para título do modal
++	Opção para criar botões de ações personalizados ( ex.: [ {name: 'btn1', class="newClass", action: function(){}} ] )
++	Início da documentação de opções
 
 27.01.2012
 +	Modal ser ativado por elementos com classe ( ex.: <a href="ajax.html" class="greatbox-enabled" /> )
