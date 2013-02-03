@@ -2,9 +2,30 @@ jQuery GreatBox
 ===============
 A great jquery lightbox plugin
 
+Como usar:
+----------
+
 Opções:
 -------
-O greatbox aceita diversas opções e é completamente flexível.
+O greatbox aceita diversas opções e é completamente flexível. Para passar as opções você possui duas maneiras:   
+
+***Opções via javascript***   
+As opções via javascript são passadas normalmente como qualquer outro plugin. Veja o exemplo:   
+
+```javascript
+$('.meuElemento').greatbox({
+	option: 'value',
+	addclass: 'nova-classe-do-modal',
+	removepagescroll: true
+});
+```
+
+***Opções via html***   
+Além via javascript, há a possibilidade de passar as opções via atributo "data". O plugin irá procurar automaticamente por este atributo no elemento. Veja o exemplo:   
+
+```html
+<a class="greatbox-enabled" href="" data-option="value" data-addclass="nova-classe-do-modal" data-removepagescroll="false">Abrir modal</a>
+```
 
 ### Customização visual ###
 +	**addclass: string** default: ''   
@@ -256,6 +277,7 @@ Releases:
 
 List to do:
 -----------
++	Permitir passar booleano e até função via atributo "data-". Hoje, como pega apenas a string, algumas opções não são aceitas via atributo.
 +	Sistema inteligente de cálculo (ativado manualmente) para conteúdos maiores que a página
 +	Tipos padrões de modal ( ex.: success, alert, error, question e default )
 +	Botões padrões de acordo com o tipo do modal
