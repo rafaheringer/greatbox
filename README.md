@@ -12,7 +12,7 @@ O greatbox aceita diversas opções e é completamente flexível.
 	class - Classe css adicional ao botão. Todos os botões já vem com a classe "greatbox_btn" por padrão.  
 	name - O nome que ficará dentro do botão, como "Fechar" ou "Confirmar".  
 	action - A ação executada ao clicar no botão. Poderá passar uma função ou apenas passar a string "close" para fechar o modal. Caso o botão tenha a classe "disabled", a ação não ocorrerá.  
-	```javascript
+	'''javascript
 	buttons: [
 		{
 			class: 'closeBtn',
@@ -31,7 +31,7 @@ O greatbox aceita diversas opções e é completamente flexível.
 			}
 		}
 	]
-	```
+	'''
 
 
 Releases:
