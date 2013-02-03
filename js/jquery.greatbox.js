@@ -161,23 +161,33 @@
 
 		//Estrutura html
 		var html = '<div id="' + pluginName + '" class="' + this.options.addclass + '">';
-			html += '<div id="' + pluginName + '_container">';
+			html += '<div id="' + this.prefix + 'container">';
 				//Topo com título
-				html += '<div class="' + this.prefix + 'header">';
-				html += '</div>';
+				if(this.options.title) {
+					html += '<div class="' + this.prefix + 'header">';
+						html += '<h2>' + this.options.title + '</h2>';
+					html += '</div>';
+				}
+
+				//Botão de fechar
+				if(this.options.closebutton) {
+					html += '<div class="' + this.prefix + 'closeButton">';
+						html += '<a href="javascript:;">' + this.options.closebuttontext +  '</a>';
+					html += '</div>';
+				}
 
 				//Conteúdo
 				html += '<div class="' + this.prefix + 'content">';
 					html += '<div class="' + this.prefix + 'contentContainer">';
-						if(this.options.closebutton)
-							html += '<span class="' + this.prefix + 'closeButton"><a href="javascript:;">' + this.options.closebuttontext +  '</a></span>';
 						html += htmlInside;
 					html += '</div>';
 				html += '</div>';
 
 				//Rodapé e seus links de ação
-				html += '<div class="' + this.prefix + 'footer">';
-				html += '</div>';			
+				if(this.options.buttons) {
+					html += '<div class="' + this.prefix + 'footer">';
+					html += '</div>';	
+				}
 			html += '</div>';
 		html += '</div>';
 
@@ -509,11 +519,13 @@
 			effect: 'fadeInOut',		//Tipo de animação utilizado na abertura e fechamento do modal (fadeInOut, puffInIn, puffInOut)
 
 			//Customização do comportamento
-			buttons: null,				//Botões customizáveis que ficam no rodapé do modal
 			content: null,				//Conteúdo que será plotado no modal. Pode ser string ou elemento jquery
 			closeonesc: true,			//Fechar o modal ao apertar ESC?
 			closeinoutside: true,		//Fechar modal ao clicar do lado de fora (blackout)?
 			closebutton: true,			//Botão de fechar
+
+			//Botões personalizados
+			buttons: null,				//Botões customizáveis que ficam no rodapé do modal
 
 			//Ajax
 			ajax: null,					//Habilita ajax. Se for "true", pegar URL do href ou data-ajaxurl. "False" para forçar desabilitação.
@@ -524,6 +536,7 @@
 			ajaxerror: null,			//Função de callback padrão para jquery ajax
 
 			//Textos
+			title: null,												//Título do modal. Null ou false para desabilitar
 			ajaxerrortext: 'Ops! Algum erro ocorreu com a requisição',	//Erro no ajax
 			contenterror: 'Ops! Parece que o conteúdo está vazio...',	//Texto caso ocorra erro qualquer com conteúdo
 			loadingtext: 'Carregando...',								//Texto padrão para "carregando"
