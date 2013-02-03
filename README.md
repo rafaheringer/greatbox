@@ -4,12 +4,40 @@ A great jquery lightbox plugin
 
 Como usar:
 ----------
+Existem três maneiras de se chamar um modal. Os dois primeiros métodos exibirá o modal assim que o usuário clicar no elemento. Já o último método existe para se abrir o modal a qualquer momento, independente do clique do usuário. Vamos a eles:   
+
+**Chamada via javascript**  
+Este método serve para atribuir o modal via javascript assim que o DOM é carregado.
+
+```html
+<!-- Elemento HTML -->
+<a href="minhaPaginaAjax.html" class="meuElemento">Abrir modal</a>
+```
+
+```javascript
+//Chamada javascript
+$('.meuElemento').greatbox({option: 'value'});
+```
+
+**Chamada via html**  
+Este método elimina o usuo do javascript. Adicionando a classe "greatbox-enabled" no elemento, o modal será atribuito automaticamente.
+
+```html
+<a class="greatbox-enabled meuElemento" href="minhaPaginaAjax.html" data-option="value">Abrir modal</a>
+```
+
+**Chamda direta**  
+Com este método é possível abrir o modal sem depender do clique do usuário, por exemplo, ao abrir o site.
+
+```javascript
+$.greatbox.open({option:'value'});
+```
 
 Opções:
 -------
 O greatbox aceita diversas opções e é completamente flexível. Para passar as opções você possui duas maneiras:   
 
-***Opções via javascript***   
+**Opções via javascript**   
 As opções via javascript são passadas normalmente como qualquer outro plugin. Veja o exemplo:   
 
 ```javascript
@@ -20,11 +48,19 @@ $('.meuElemento').greatbox({
 });
 ```
 
-***Opções via html***   
-Além via javascript, há a possibilidade de passar as opções via atributo "data". O plugin irá procurar automaticamente por este atributo no elemento. Veja o exemplo:   
+**Opções via html**   
+Há a possibilidade de passar as opções via atributo "data", sem a necessidade de escrever javascript. O plugin irá procurar automaticamente por este atributo no elemento. Veja o exemplo:   
 
 ```html
 <a class="greatbox-enabled" href="" data-option="value" data-addclass="nova-classe-do-modal" data-removepagescroll="false">Abrir modal</a>
+```
+
+Além dessas opções, você pode atribuir valores padrões para todos os modais que o seu site irá usar. No exemplo a seguir sobrescrevemos a opção "removepagescroll", alterando seu valor padrão:
+
+```html
+$.greatbox.setDefaults({
+	removepagescroll: true
+});
 ```
 
 ### Customização visual ###
@@ -40,25 +76,25 @@ Além via javascript, há a possibilidade de passar as opções via atributo "da
 	```javascript
 	duration: 1000
 	```
-+	***errordisplaytime: int*** default: 6500   
++	**errordisplaytime: int** default: 6500   
 	Duração da exibição do erro, geralmente o erro ocorre em requisições ajax e é exibido na tela uma mensagem explicando o ocorrido.   
 	
 	```javascript
 	errordisplaytime: 4000
 	```
-+	***centralize: bool*** default: true   
++	**centralize: bool*** default: true   
 	Opção para centralizar automaticamente o modal no centro da página.   
 	
 	```javascript
 	centralize: false
 	```
-+	***removepagescroll: bool*** default: false   
++	**removepagescroll: bool** default: false   
 	Opção para remover o scroll da página assim que o modal for aberto.   
 	
 	```javascript
 	removepagescroll: true
 	```
-+	***effect: string(fadeInOut,puffInIn,puffInOut)*** default: 'fadeInOut'   
++	**effect: string(fadeInOut,puffInIn,puffInOut)** default: 'fadeInOut'   
 	Efeito visual ao abrir e fechar o modal. O padrão é um simples fade, mas poderá passar outras opções com puffInOut. Experimente as opções visuais.   
 	
 	```javascript

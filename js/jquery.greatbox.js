@@ -50,7 +50,14 @@
 			//Verifica se a URL do elemento não é um hash ou javascript
 			if( this.element.attr('href').split('')[0] != '#' && this.element.attr('href').indexOf('javascript:') == -1 && this.element.attr('href') != '')
 				this.options.ajax = this.element.attr('href');
+		} 
+
+		//Verifica se não há possibilidade de ajax
+		else if(this.options.ajax === true && (this.options.content != '' || this.options.content)) {
+			this.options.ajax = false;
 		}
+
+
 
 		//Caso seja elemento, dispara no click
 		if (this.element.length) {
@@ -89,6 +96,8 @@
 
 		//Exibe blackout
 		this.showBlackout();
+
+		console.log(this.options);
 
 		//Caso possua ajax
 		if (this.options.ajax) {
@@ -589,6 +598,11 @@
 			if($[pluginName].openedModal) {
 				return $[pluginName].openedModal.data('plugin_' + pluginName).close();
 			}
+		},
+
+		//Método para abrir modal
+		open: function(options) {
+			new Plugin( $(), options );
 		}
 	};
 
