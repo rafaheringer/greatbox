@@ -7,11 +7,11 @@ Opções:
 O greatbox aceita diversas opções e é completamente flexível. 
 
 ### Botões personalizados ###
-+	**buttons: [{class:string, name:string, action:function}, ...]** padrão: null
-	Adiciona botões personalizados ao rodapé da página. Cada botão é simbolizado por um objeto com as seguintes propriedades:
-	class - Classe css adicional ao botão. Todos os botões já vem com a classe "greatbox_btn" por padrão.
-	name - O nome que ficará dentro do botão, como "Fechar" ou "Confirmar".
-	action - A ação executada ao clicar no botão. Poderá passar uma função ou apenas passar a string "close" para fechar o modal. Caso o botão tenha a classe "disabled", a ação não ocorrerá.
++	**buttons: [{class:string, name:string, action:function}, ...]** padrão: null  
+	Adiciona botões personalizados ao rodapé da página. Cada botão é simbolizado por um objeto com as seguintes propriedades:  
+	class - Classe css adicional ao botão. Todos os botões já vem com a classe "greatbox_btn" por padrão.  
+	name - O nome que ficará dentro do botão, como "Fechar" ou "Confirmar".  
+	action - A ação executada ao clicar no botão. Poderá passar uma função ou apenas passar a string "close" para fechar o modal. Caso o botão tenha a classe "disabled", a ação não ocorrerá.  
 	```javascript
 	buttons: [
 		{
