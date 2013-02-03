@@ -46,7 +46,7 @@
 		var _this = this;
 
 		//Verifica se será executado como ajax
-		if(this.options.ajax === null && typeof this.element.attr('href') != 'undefined') {
+		if(this.options.ajax === true && typeof this.element.attr('href') != 'undefined' && !this.options.content) {
 			//Verifica se a URL do elemento não é um hash ou javascript
 			if( this.element.attr('href').split('')[0] != '#' && this.element.attr('href').indexOf('javascript:') == -1 && this.element.attr('href') != '')
 				this.options.ajax = this.element.attr('href');
@@ -224,7 +224,6 @@
                 		else
                 			_this.close();
                 	}
-
             	});
 			}
 		}
@@ -562,7 +561,7 @@
 			buttons: null,				//Botões customizáveis que ficam no rodapé do modal. Exemplo: [{class:"novo-botao", name:"Meu botão", action: "close"}]
 
 			//Ajax
-			ajax: null,					//Habilita ajax. Se for "true", pegar URL do href ou data-ajaxurl. "False" para forçar desabilitação.
+			ajax: true,					//Habilita ajax. Se for "true", pegar URL do href ou data-ajaxurl. "False" para forçar desabilitação.
 			ajaxcache: true,			//Habilita cache para ajax
 			ajaxdata: null,				//Dados para serem passados por ajax
 			ajaxbeforesend: null,		//Função de callback padrão para jquery ajax
